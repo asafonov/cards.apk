@@ -1,4 +1,4 @@
-package org.asafonov.app;
+package org.asafonov.cards;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;

@@ -1,41 +1,3 @@
-class MessageBus {
-  constructor() {
-    this.subscribers = {};
-  }
-  send (type, data) {
-    if (this.subscribers[type] !== null && this.subscribers[type] !== undefined) {
-      for (var i = 0; i < this.subscribers[type].length; ++i) {
-        this.subscribers[type][i]['object'][this.subscribers[type][i]['func']](data);
-      }
-    }
-  }
-  subscribe (type, object, func) {
-    if (this.subscribers[type] === null || this.subscribers[type] === undefined) {
-      this.subscribers[type] = [];
-    }
-    this.subscribers[type].push({
-      object: object,
-      func: func
-    });
-  }
-  unsubscribe (type, object, func) {
-    for (var i = 0; i < this.subscribers[type].length; ++i) {
-      if (this.subscribers[type][i].object === object && this.subscribers[type][i].func === func) {
-        this.subscribers[type].slice(i, 1);
-        break;
-      }
-    }
-  }
-  unsubsribeType (type) {
-    delete this.subscribers[type];
-  }
-  destroy() {
-    for (type in this.subscribers) {
-      this.unsubsribeType(type);
-    }
-    this.subscribers = null;
-  }
-}
 class AbstractList {
   constructor (list) {
     this.list = this.getList() || {}
@@ -102,6 +64,44 @@ class Deck {
   }
   isEmpty() {
     return this.deck.length === 0
+  }
+}
+class MessageBus {
+  constructor() {
+    this.subscribers = {};
+  }
+  send (type, data) {
+    if (this.subscribers[type] !== null && this.subscribers[type] !== undefined) {
+      for (var i = 0; i < this.subscribers[type].length; ++i) {
+        this.subscribers[type][i]['object'][this.subscribers[type][i]['func']](data);
+      }
+    }
+  }
+  subscribe (type, object, func) {
+    if (this.subscribers[type] === null || this.subscribers[type] === undefined) {
+      this.subscribers[type] = [];
+    }
+    this.subscribers[type].push({
+      object: object,
+      func: func
+    });
+  }
+  unsubscribe (type, object, func) {
+    for (var i = 0; i < this.subscribers[type].length; ++i) {
+      if (this.subscribers[type][i].object === object && this.subscribers[type][i].func === func) {
+        this.subscribers[type].slice(i, 1);
+        break;
+      }
+    }
+  }
+  unsubsribeType (type) {
+    delete this.subscribers[type];
+  }
+  destroy() {
+    for (type in this.subscribers) {
+      this.unsubsribeType(type);
+    }
+    this.subscribers = null;
   }
 }
 class Updater {
@@ -302,6 +302,7 @@ class DurakController {
     asafonov.messageBus.send(asafonov.events.TAKE_BTN_UPDATE, false)
   }
   opponentMove() {
+    if (this.isGameOver()) return
     let card
     const opponentStarted = this.game.length % 2 === 0
     if (opponentStarted) {
@@ -385,7 +386,7 @@ class DurakController {
     asafonov.messageBus.send(asafonov.events.MY_UPDATED, this.my)
   }
   isGameOver() {
-    if (this.my.length === 0 || this.opponent.length === 0) {
+    if (this.trumpGone && (this.my.length === 0 || this.opponent.length === 0)) {
       asafonov.messageBus.send(asafonov.events.GAME_OVER, this.my.length === 0)
       return true
     }

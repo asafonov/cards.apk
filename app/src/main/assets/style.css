@@ -1,5 +1,5 @@
 :root {
-  --card_size: 20vh;
+  --card_size: 25vh;
   --value_top_position: calc(var(--card_size)*0.05);
   --suit_left_position: calc(var(--card_size)*0.05);
   --suit_top_position: calc(var(--card_size)*0.165);

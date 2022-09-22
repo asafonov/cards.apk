@@ -38,11 +38,24 @@ svg * {
   stroke-linejoin: round;
 }
 
+.board .button svg {
+  height: calc(var(--card_size)*0.5);
+}
+
+.board .button.done svg path {
+  fill: black;
+}
+
+.board .button.take svg path {
+  fill: red;
+}
+
 .body svg {
   height: var(--card_size);
 }
 
-.body svg rect {
+.body svg rect,
+.board .button svg rect {
   width: 100%;
   height: 100%;
   fill: white;
@@ -201,26 +214,17 @@ svg * {
 }
 
 .button {
-  padding-top: 1.5vw;
-  padding-bottom: 1.5vw;
-  padding-left: 4vw;
-  padding-right: 4vw;
-  color: white;
-  font-size: 2vw;
-  border-radius: 2vw;
   position: absolute;
   top: 1vw;
   right: 1vw;
   z-index: 1;
 }
 
-.take {
-  background-color: #990f02;
+.button.take {
   display: none;
 }
 
-.done {
-  background-color: #5dbb63;
+.button.done {
   display: none;
 }
 
